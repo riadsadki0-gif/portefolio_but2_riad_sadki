@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SADKI_RIAD :: PORTFOLIO</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --green:#00ff88;
+  --green-dim:#00aa55;
+  --green-dark:#003322;
+  --cyan:#00ffee;
+  --red:#ff3355;
+  --bg:#050d0a;
+  --bg2:#081510;
+  --surface:#0d1f17;
+  --border:#00ff8833;
+  --text:#c8ffd4;
+  --muted:#4a7a5a;
+  --font-mono:'Share Tech Mono',monospace;
+  --font-display:'Orbitron',sans-serif;
+  --font-body:'Exo 2',sans-serif;
+}
+
+html{scroll-behavior:smooth}
+
+/* CUSTOM CURSOR */
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.7;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+#cursor{
+  position:fixed;
+  width:12px;height:12px;
+  background:var(--green);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.08s,background 0.2s;
+  mix-blend-mode:screen;
+}
+
+#cursor-ring{
+  position:fixed;
+  width:32px;height:32px;
+  border:1px solid var(--green);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9998;
+  transform:translate(-50%,-50%);
+  transition:all 0.15s ease;
+  opacity:0.5;
+}
+
+/* SCANLINES */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.15) 2px,
+    rgba(0,0,0,0.15) 4px
+  );
+  pointer-events:none;
+  z-index:9990;
+}
+
+/* NOISE OVERLAY */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:9989;
+  opacity:0.4;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;height:60px;
+  background:rgba(5,13,10,0.9);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+
+.nav-logo{
+  font-family:var(--font-display);
+  font-size:14px;font-weight:700;
+  color:var(--green);
+  letter-spacing:0.2em;
+}
+
+.nav-logo span{color:var(--muted)}
+
+.nav-links{
+  display:flex;gap:2.5rem;list-style:none;
+}
+
+.nav-links a{
+  text-decoration:none;
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--muted);
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  transition:color 0.2s;
+  position:relative;
+}
+
+.nav-links a::before{content:'> ';opacity:0;transition:opacity 0.2s}
+.nav-links a:hover{color:var(--green)}
+.nav-links a:hover::before{opacity:1}
+
+.nav-status{
+  font-family:var(--font-mono);font-size:11px;
+  color:var(--green-dim);
+}
+
+.blink{animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:6rem 3rem 4rem;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--border) 1px,transparent 1px),
+    linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;
+  animation:gridScroll 20s linear infinite;
+}
+
+@keyframes gridScroll{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(60px)}
+}
+
+.hero-glow{
+  position:absolute;
+  top:20%;left:50%;
+  transform:translate(-50%,-50%);
+  width:600px;height:400px;
+  background:radial-gradient(ellipse,rgba(0,255,136,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+.hero-inner{position:relative;z-index:2;max-width:1000px;}
+
+.hero-pre{
+  font-family:var(--font-mono);
+  font-size:12px;color:var(--green-dim);
+  letter-spacing:0.15em;
+  margin-bottom:1rem;
+  opacity:0;
+  animation:fadeUp 0.6s ease 0.3s forwards;
+}
+
+.hero-name{
+  font-family:var(--font-display);
+  font-size:clamp(4rem,10vw,9rem);
+  font-weight:900;
+  line-height:0.9;
+  color:var(--green);
+  letter-spacing:-0.02em;
+  position:relative;
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.5s forwards;
+}
+
+.hero-name .glitch{
+  position:relative;
+  display:inline-block;
+}
+
+.hero-name .glitch::before,
+.hero-name .glitch::after{
+  content:attr(data-text);
+  position:absolute;
+  top:0;left:0;width:100%;height:100%;
+}
+
+.hero-name .glitch::before{
+  color:var(--cyan);
+  clip-path:polygon(0 0,100% 0,100% 35%,0 35%);
+  animation:glitch1 3s infinite;
+  left:2px;
+}
+
+.hero-name .glitch::after{
+  color:var(--red);
+  clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);
+  animation:glitch2 3s infinite;
+  left:-2px;
+}
+
+@keyframes glitch1{
+  0%,92%,100%{transform:translateX(0);opacity:0}
+  93%{transform:translateX(-4px);opacity:1}
+  95%{transform:translateX(4px);opacity:1}
+  97%{transform:translateX(-2px);opacity:1}
+  99%{transform:translateX(0);opacity:0}
+}
+
+@keyframes glitch2{
+  0%,94%,100%{transform:translateX(0);opacity:0}
+  95%{transform:translateX(4px);opacity:1}
+  97%{transform:translateX(-4px);opacity:1}
+  99%{transform:translateX(0);opacity:0}
+}
+
+.hero-title{
+  font-family:var(--font-mono);
+  font-size:clamp(1rem,2.5vw,1.6rem);
+  color:var(--cyan);
+  letter-spacing:0.1em;
+  margin-top:0.5rem;
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.8s forwards;
+}
+
+.hero-desc{
+  max-width:520px;
+  color:var(--muted);
+  font-size:14px;
+  margin-top:1.5rem;
+  line-height:1.9;
+  opacity:0;
+  animation:fadeUp 0.7s ease 1s forwards;
+}
+
+.hero-stats{
+  display:flex;gap:3rem;margin-top:3rem;
+  opacity:0;
+  animation:fadeUp 0.7s ease 1.2s forwards;
+}
+
+.hero-stat-item{text-align:center}
+
+.stat-val{
+  font-family:var(--font-display);
+  font-size:2.5rem;font-weight:900;
+  color:var(--green);display:block;
+  line-height:1;
+}
+
+.stat-label{
+  font-family:var(--font-mono);
+  font-size:10px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  display:block;margin-top:4px;
+}
+
+.hero-cta{
+  display:flex;gap:1rem;margin-top:3rem;
+  opacity:0;
+  animation:fadeUp 0.7s ease 1.4s forwards;
+}
+
+.btn-hack{
+  font-family:var(--font-mono);
+  font-size:12px;font-weight:400;
+  letter-spacing:0.1em;text-transform:uppercase;
+  text-decoration:none;
+  padding:14px 32px;
+  border:1px solid var(--green);
+  color:var(--bg);
+  background:var(--green);
+  display:inline-block;
+  clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px);
+  transition:all 0.2s;
+  cursor:none;
+}
+
+.btn-hack:hover{
+  background:var(--cyan);
+  border-color:var(--cyan);
+}
+
+.btn-ghost{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  text-decoration:none;
+  padding:14px 32px;
+  border:1px solid var(--border);
+  color:var(--green);
+  background:transparent;
+  display:inline-block;
+  clip-path:polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px);
+  transition:all 0.2s;
+  cursor:none;
+}
+
+.btn-ghost:hover{border-color:var(--green);background:var(--green-dark)}
+
+/* TERMINAL LINE */
+.terminal-line{
+  display:flex;align-items:center;gap:0.5rem;
+  font-family:var(--font-mono);font-size:12px;
+  color:var(--muted);margin-top:4rem;
+  opacity:0;animation:fadeUp 0.6s ease 1.6s forwards;
+}
+
+.terminal-line::before{content:'$ ';color:var(--green)}
+
+/* SECTION STYLES */
+section{padding:6rem 3rem;position:relative}
+
+.section-tag{
+  font-family:var(--font-mono);
+  font-size:11px;color:var(--green-dim);
+  letter-spacing:0.2em;text-transform:uppercase;
+  margin-bottom:0.75rem;
+  display:flex;align-items:center;gap:0.75rem;
+}
+
+.section-tag::before{
+  content:'';
+  display:inline-block;
+  width:24px;height:1px;
+  background:var(--green-dim);
+}
+
+.section-title{
+  font-family:var(--font-display);
+  font-size:clamp(1.8rem,4vw,3rem);
+  font-weight:700;color:var(--text);
+  line-height:1.1;
+  margin-bottom:3rem;
+}
+
+.section-title em{
+  color:var(--green);
+  font-style:normal;
+}
+
+/* COMP SECTION */
+#competences{background:var(--bg2)}
+
+.comp-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:2px;
+}
+
+.comp-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:2.5rem;
+  position:relative;
+  overflow:hidden;
+  transition:border-color 0.3s,background 0.3s;
+}
+
+.comp-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+  opacity:0;
+  transition:opacity 0.3s;
+}
+
+.comp-card:hover{
+  border-color:rgba(0,255,136,0.4);
+  background:#0f2218;
+}
+
+.comp-card:hover::before{opacity:1}
+
+.comp-card-top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:2rem;
+}
+
+.comp-card-name{
+  font-family:var(--font-display);
+  font-size:1rem;font-weight:700;
+  color:var(--text);
+  text-transform:uppercase;letter-spacing:0.05em;
+}
+
+.comp-score-display{
+  text-align:right;
+}
+
+.comp-score-num{
+  font-family:var(--font-display);
+  font-size:2.5rem;font-weight:900;
+  color:var(--green);line-height:1;
+  display:block;
+}
+
+.comp-score-denom{
+  font-family:var(--font-mono);
+  font-size:10px;color:var(--muted);
+  letter-spacing:0.1em;
+}
+
+.comp-row{
+  display:flex;align-items:center;
+  gap:12px;margin-bottom:12px;
+}
+
+.comp-row-label{
+  font-family:var(--font-mono);
+  font-size:11px;color:var(--muted);
+  width:230px;flex-shrink:0;
+}
+
+.comp-bar-track{
+  flex:1;height:2px;
+  background:rgba(0,255,136,0.1);
+  position:relative;overflow:hidden;
+}
+
+.comp-bar-fill{
+  position:absolute;top:0;left:0;height:100%;
+  background:var(--green);
+  box-shadow:0 0 6px var(--green);
+}
+
+.comp-row-val{
+  font-family:var(--font-mono);
+  font-size:12px;color:var(--cyan);
+  width:20px;text-align:right;
+}
+
+/* SAVOIR SECTION */
+#savoirs{
+  background:var(--bg);
+}
+
+.savoirs-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+}
+
+.sav-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:2.5rem 2rem;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s;
+}
+
+.sav-card::after{
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+
+.sav-card:hover{border-color:rgba(0,255,238,0.4);background:#0a1f1d}
+.sav-card:hover::after{opacity:1}
+
+.sav-type-badge{
+  font-family:var(--font-mono);
+  font-size:10px;
+  letter-spacing:0.15em;text-transform:uppercase;
+  padding:4px 10px;
+  border:1px solid;
+  display:inline-block;margin-bottom:1.5rem;
+}
+
+.badge-sav{border-color:rgba(0,255,136,0.4);color:var(--green)}
+.badge-sf{border-color:rgba(0,255,238,0.4);color:var(--cyan)}
+.badge-se{border-color:rgba(255,51,85,0.4);color:var(--red)}
+
+.sav-title{
+  font-family:var(--font-display);
+  font-size:1.1rem;font-weight:700;
+  color:var(--text);margin-bottom:1.5rem;
+  text-transform:uppercase;letter-spacing:0.04em;
+}
+
+.sav-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+
+.sav-list li{
+  font-family:var(--font-mono);
+  font-size:12px;color:var(--muted);
+  padding-left:1.2rem;position:relative;
+  line-height:1.5;
+}
+
+.sav-list li::before{
+  content:'>';
+  position:absolute;left:0;
+  color:var(--green-dim);
+}
+
+/* EXP SECTION */
+#experiences{background:var(--bg2)}
+
+.exp-timeline{
+  position:relative;
+  padding-left:2rem;
+}
+
+.exp-timeline::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;
+  width:1px;
+  background:linear-gradient(to bottom,var(--green),transparent);
+}
+
+.exp-item{
+  position:relative;
+  padding:0 0 3rem 3rem;
+}
+
+.exp-item::before{
+  content:'';
+  position:absolute;left:-5px;top:4px;
+  width:10px;height:10px;
+  background:var(--green);
+  border-radius:50%;
+  box-shadow:0 0 12px var(--green);
+}
+
+.exp-period{
+  font-family:var(--font-mono);
+  font-size:11px;color:var(--green-dim);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:0.4rem;
+}
+
+.exp-title{
+  font-family:var(--font-display);
+  font-size:1.15rem;font-weight:700;
+  color:var(--text);text-transform:uppercase;
+  letter-spacing:0.05em;margin-bottom:0.25rem;
+}
+
+.exp-org{
+  font-family:var(--font-mono);
+  font-size:12px;color:var(--cyan);
+  margin-bottom:0.75rem;
+}
+
+.exp-desc{
+  font-family:var(--font-body);
+  font-size:13px;color:var(--muted);
+  max-width:600px;line-height:1.7;
+}
+
+.exp-tags{
+  display:flex;flex-wrap:wrap;gap:6px;
+  margin-top:0.75rem;
+}
+
+.exp-tag{
+  font-family:var(--font-mono);
+  font-size:10px;letter-spacing:0.08em;
+  padding:3px 8px;
+  border:1px solid var(--border);
+  color:var(--green-dim);
+}
+
+/* BILAN */
+#bilan{background:var(--bg)}
+
+.bilan-layout{
+  display:grid;grid-template-columns:1fr 1fr;gap:2px;
+}
+
+.bilan-col{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:3rem;
+}
+
+.bilan-col-head{
+  display:flex;align-items:center;gap:1rem;
+  margin-bottom:2rem;
+}
+
+.bilan-indicator{
+  width:8px;height:8px;border-radius:50%;
+  display:inline-block;
+  animation:pulse 2s infinite;
+}
+
+.ind-green{background:var(--green);box-shadow:0 0 8px var(--green)}
+.ind-red{background:var(--red);box-shadow:0 0 8px var(--red)}
+
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:0.5;transform:scale(0.8)}
+}
+
+.bilan-col-title{
+  font-family:var(--font-display);
+  font-size:1.1rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.08em;
+}
+
+.bilan-items{list-style:none;display:flex;flex-direction:column;gap:12px;}
+
+.bilan-item{
+  display:flex;align-items:flex-start;gap:12px;
+  font-family:var(--font-mono);font-size:12px;
+  line-height:1.5;
+}
+
+.bilan-item-bullet{
+  color:var(--green);flex-shrink:0;margin-top:1px;
+}
+
+.faibles .bilan-item-bullet{color:var(--red)}
+.bilan-item-text{color:var(--muted)}
+
+/* CONTACT */
+#contact{background:var(--bg2)}
+
+.contact-layout{
+  display:grid;grid-template-columns:1fr 1fr;gap:4rem;
+  align-items:start;
+}
+
+.contact-text{
+  font-size:15px;color:var(--muted);line-height:1.9;
+  margin-bottom:2rem;
+  font-family:var(--font-mono);
+}
+
+.contact-rows{
+  display:flex;flex-direction:column;gap:2px;
+}
+
+.contact-row{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:1rem 1.5rem;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:border-color 0.2s,background 0.2s;
+}
+
+.contact-row:hover{
+  border-color:rgba(0,255,136,0.4);
+  background:#0f2218;
+}
+
+.contact-key{
+  font-family:var(--font-mono);font-size:10px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--green-dim);
+}
+
+.contact-val{
+  font-family:var(--font-mono);font-size:12px;
+  color:var(--text);
+}
+
+/* ASCII ART ZONE */
+.ascii-block{
+  font-family:var(--font-mono);
+  font-size:12px;
+  color:var(--green-dim);
+  line-height:1.4;
+  opacity:0.7;
+  user-select:none;
+}
+
+/* FOOTER */
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  padding:2rem 3rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+
+.footer-copy{
+  font-family:var(--font-mono);
+  font-size:11px;color:var(--muted);
+}
+
+.footer-logo{
+  font-family:var(--font-display);
+  font-size:14px;font-weight:700;
+  color:var(--green);letter-spacing:0.2em;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* SCROLL REVEAL */
+.reveal{
+  opacity:0;transform:translateY(30px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+
+.reveal.visible{opacity:1;transform:none}
+
+/* DIVIDER */
+.divider{
+  border:none;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:0;
+}
+
+/* LOADING OVERLAY */
+#loader{
+  position:fixed;inset:0;
+  background:var(--bg);
+  z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:1rem;
+}
+
+.loader-text{
+  font-family:var(--font-mono);
+  font-size:13px;color:var(--green);
+  letter-spacing:0.1em;
+}
+
+.loader-bar-outer{
+  width:300px;height:2px;
+  background:var(--border);
+  overflow:hidden;
+}
+
+.loader-bar-inner{
+  height:100%;width:0%;
+  background:var(--green);
+  box-shadow:0 0 8px var(--green);
+  animation:loadProgress 1.5s ease forwards;
+}
+
+@keyframes loadProgress{
+  0%{width:0%}
+  60%{width:75%}
+  100%{width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-text" id="loader-msg">INITIALIZING PORTFOLIO...</div>
+  <div class="loader-bar-outer">
+    <div class="loader-bar-inner"></div>
+  </div>
+</div>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">SADKI<span>_</span>RIAD</span>
+  <ul class="nav-links">
+    <li><a href="#synthese">Synthèse</a></li>
+    <li><a href="#competences">Compétences</a></li>
+    <li><a href="#savoirs">Savoir-faire</a></li>
+    <li><a href="#experiences">Expériences</a></li>
+    <li><a href="#projets">Projets</a></li>
+    <li><a href="#bilan">Bilan</a></li>
+    <li><a href="#demarche">Démarche</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <span class="nav-status">STATUS: ONLINE <span class="blink">█</span></span>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <p class="hero-pre">> LOADING PROFILE // BUT R&T CYBERSÉCURITÉ — 2ᵉ ANNÉE</p>
+    <h1 class="hero-name">
+      <span class="glitch" data-text="RIAD">RIAD</span><br>
+      <span class="glitch" data-text="SADKI">SADKI</span>
+    </h1>
+    <p class="hero-title">Network & Security Engineer · Stage ANCV · IUT Villetaneuse · ESIEA 2026</p>
+    <p class="hero-desc">Étudiant en 2ᵉ année de BUT R&T Cybersécurité, expérience de stage en administration réseau à l'ANCV. Spécialisé en sécurité offensive, IDS/IPS et architecture réseau d'entreprise. Recherche une alternance ingénieur à partir de septembre 2026.</p>
+    <div class="hero-stats">
+      <div class="hero-stat-item">
+        <span class="stat-val">4</span>
+        <span class="stat-label">Compétences clés</span>
+      </div>
+      <div class="hero-stat-item">
+        <span class="stat-val">3.3</span>
+        <span class="stat-label">Score moyen / 4</span>
+      </div>
+      <div class="hero-stat-item">
+        <span class="stat-val">∞</span>
+        <span class="stat-label">Curiosité technique</span>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="#competences" class="btn-hack">Voir le profil</a>
+      <a href="#contact" class="btn-ghost">Me contacter</a>
+    </div>
+    <div class="terminal-line">
+      ssh riad@esiea.fr — connexion établie — shell /bin/zsh — Île-de-France, FR <span class="blink">_</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SYNTHESE STRUCTURÉE -->
+<section id="synthese" style="background:var(--bg2)">
+  <div class="section-tag">01 — synthèse réflexive</div>
+  <h2 class="section-title">Synthèse <em>structurée</em></h2>
+
+  <div style="max-width:860px;display:flex;flex-direction:column;gap:2px;" class="reveal">
+
+    <!-- INTRO -->
+    <div style="background:var(--surface);border:1px solid var(--border);padding:2.5rem;border-left:3px solid var(--green)">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--green-dim);text-transform:uppercase;margin-bottom:1rem">// Introduction</div>
+      <p style="font-size:14px;color:var(--text);line-height:1.9;margin-bottom:1rem">
+        Ce portfolio numérique constitue une démarche de démonstration, de progression et de valorisation des compétences acquises au cours de ma 2ᵉ année de BUT Réseaux & Télécommunications, parcours Cybersécurité, à l'IUT de Villetaneuse. Il vise à articuler le monde universitaire et le monde socio-économique en rendant visibles et argumentées les compétences développées dans des situations concrètes.
+      </p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.9">
+        Mon objectif est de montrer comment mes apprentissages — issus des SAE, des TPs, du stage à l'ANCV et de ma pratique personnelle — m'ont permis de construire un profil technique solide orienté cybersécurité et administration réseau, tout en identifiant lucidement mes axes de progression.
+      </p>
+    </div>
+
+    <!-- DÉVELOPPEMENT -->
+    <div style="background:var(--surface);border:1px solid var(--border);padding:2.5rem;border-left:3px solid var(--cyan)">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--cyan);text-transform:uppercase;margin-bottom:1.5rem">// Développement — compétences acquises & preuves</div>
+
+      <div style="display:flex;flex-direction:column;gap:1.5rem">
+
+        <div>
+          <p style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem">Compétences techniques démontrées</p>
+          <p style="font-size:13px;color:var(--muted);line-height:1.9">
+            À travers la SAE "Architecture réseau d'entreprise", j'ai configuré une infrastructure complète incluant VLAN, DMZ et GLPI dans un contexte professionnalisant. Cette situation m'a permis de mobiliser mes connaissances en segmentation réseau et en gestion de parc, tout en respectant un cahier des charges précis — compétence directement réinvestie lors de mon stage à l'ANCV. Le lab de cybersécurité (Nessus / Kali / Metasploitable) m'a confronté à une démarche réelle de pentesting : identification des failles, exploitation contrôlée et rédaction d'un rapport d'analyse, ce qui développe une posture analytique et critique indispensable en cybersécurité.
+          </p>
+        </div>
+
+        <div>
+          <p style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem">Progression et autoévaluation</p>
+          <p style="font-size:13px;color:var(--muted);line-height:1.9">
+            Mon tableau d'autoévaluation des compétences transverses révèle une progression nette sur l'organisation (4/4 pour l'identification des éléments structurants via Trello et rétroplanning) et le travail en équipe (4/4 sur l'identification des rôles). Des points de vigilance subsistent : l'animation du collectif (2/4) et le partage de méthodes d'apprentissage (2/4) sont des axes sur lesquels je travaille activement. Ce regard critique sur mes propres limites est, selon moi, une condition de progression durable.
+          </p>
+        </div>
+
+        <div>
+          <p style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.6rem">Choix communicationnels et techniques du portfolio</p>
+          <p style="font-size:13px;color:var(--muted);line-height:1.9">
+            J'ai choisi de présenter ce portfolio sous forme de site web interactif plutôt qu'un document statique, car cela reflète directement les compétences techniques du parcours R&T (HTML, CSS, développement web). L'esthétique "terminal" renvoie à mon domaine de spécialité — la cybersécurité — et crée une cohérence entre le fond et la forme. Ce choix vise aussi à démontrer une capacité à communiquer de façon professionnelle et différenciante dans un contexte de valorisation de compétences.
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CONCLUSION -->
+    <div style="background:var(--surface);border:1px solid var(--border);padding:2.5rem;border-left:3px solid var(--red)">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--red);text-transform:uppercase;margin-bottom:1rem">// Conclusion</div>
+      <p style="font-size:14px;color:var(--text);line-height:1.9;margin-bottom:1rem">
+        Ce portfolio illustre une trajectoire de montée en compétences progressive et documentée, ancrée dans des situations réelles. Mon parcours — du BUT R&T à l'admission à l'ESIEA, en passant par le stage ANCV — témoigne d'une cohérence entre ambitions professionnelles et engagements académiques.
+      </p>
+      <p style="font-size:14px;color:var(--muted);line-height:1.9">
+        La démarche réflexive engagée ici ne s'arrête pas : je m'engage à continuer d'enrichir ce portfolio au fil de mon alternance ingénieur, en intégrant de nouvelles traces, de nouveaux apprentissages critiques et une autoévaluation actualisée. Le portfolio n'est pas une finalité mais un outil vivant de professionnalisation continue.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- COMPETENCES TRANSVERSES -->
+<section id="competences">
+  <div class="section-tag">02 — autoévaluation</div>
+  <h2 class="section-title">Compétences <em>transverses</em></h2>
+
+  <div class="comp-grid reveal">
+
+    <!-- ORGANISER -->
+    <div class="comp-card">
+      <div class="comp-card-top">
+        <div class="comp-card-name">Organiser son activité</div>
+        <div class="comp-score-display">
+          <span class="comp-score-num">3.0</span>
+          <span class="comp-score-denom">/ 4.0</span>
+        </div>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Identifier les éléments structurants</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:100%"></div></div>
+        <span class="comp-row-val">4</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Appliquer aux exigences d'une situation</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:75%"></div></div>
+        <span class="comp-row-val">3</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Adapter aux changements de consigne</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:75%"></div></div>
+        <span class="comp-row-val">3</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Prévoir l'activité de l'équipe</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:50%"></div></div>
+        <span class="comp-row-val">2</span>
+      </div>
+    </div>
+
+    <!-- EQUIPE -->
+    <div class="comp-card">
+      <div class="comp-card-top">
+        <div class="comp-card-name">Travailler en équipe</div>
+        <div class="comp-score-display">
+          <span class="comp-score-num">3.25</span>
+          <span class="comp-score-denom">/ 4.0</span>
+        </div>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Identifier les modalités de fonctionnement</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:100%"></div></div>
+        <span class="comp-row-val">4</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Situer les rôles et sa position</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:100%"></div></div>
+        <span class="comp-row-val">4</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Faire des propositions, écouter l'équipe</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:75%"></div></div>
+        <span class="comp-row-val">3</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Animer et faire varier son rôle</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:50%"></div></div>
+        <span class="comp-row-val">2</span>
+      </div>
+    </div>
+
+    <!-- IMPREVUS -->
+    <div class="comp-card">
+      <div class="comp-card-top">
+        <div class="comp-card-name">Agir face aux imprévus</div>
+        <div class="comp-score-display">
+          <span class="comp-score-num">3.25</span>
+          <span class="comp-score-denom">/ 4.0</span>
+        </div>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Identifier et alerter sur un problème</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:100%"></div></div>
+        <span class="comp-row-val">4</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Identifier la procédure de résolution</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:75%"></div></div>
+        <span class="comp-row-val">3</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Mettre en œuvre la procédure adaptée</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:75%"></div></div>
+        <span class="comp-row-val">3</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Résoudre les problèmes courants</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:75%"></div></div>
+        <span class="comp-row-val">3</span>
+      </div>
+    </div>
+
+    <!-- APPRENTISSAGE -->
+    <div class="comp-card">
+      <div class="comp-card-top">
+        <div class="comp-card-name">Actualiser ses savoirs</div>
+        <div class="comp-score-display">
+          <span class="comp-score-num">2.75</span>
+          <span class="comp-score-denom">/ 4.0</span>
+        </div>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Énoncer ses manières d'apprendre</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:100%"></div></div>
+        <span class="comp-row-val">4</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Enrichir et varier ses façons d'apprendre</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:75%"></div></div>
+        <span class="comp-row-val">3</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Mettre au point de nouvelles stratégies</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:50%"></div></div>
+        <span class="comp-row-val">2</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-row-label">Partager ses méthodes avec l'équipe</span>
+        <div class="comp-bar-track"><div class="comp-bar-fill" style="width:50%"></div></div>
+        <span class="comp-row-val">2</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SAVOIR-FAIRE -->
+<section id="savoirs">
+  <div class="section-tag">03 — bilan de compétences</div>
+  <h2 class="section-title">Savoir · Savoir-faire · <em>Savoir-être</em></h2>
+
+  <div class="savoirs-grid reveal">
+
+    <div class="sav-card">
+      <span class="sav-type-badge badge-sav">// Savoir</span>
+      <h3 class="sav-title">Architectures réseau</h3>
+      <ul class="sav-list">
+        <li>Architectures VLAN, DMZ, pare-feu, ACL</li>
+        <li>Protocoles TCP/UDP, DNS, DHCP, SSH</li>
+        <li>SMTP/POP3 — services de messagerie</li>
+        <li>Outils de scan : Nessus, Kali Linux</li>
+        <li>Environnements Metasploitable, WinXP lab</li>
+      </ul>
+    </div>
+
+    <div class="sav-card">
+      <span class="sav-type-badge badge-sf">// Savoir-faire</span>
+      <h3 class="sav-title">Sécurité & administration</h3>
+      <ul class="sav-list">
+        <li>Configurer pare-feu pfSense, VLAN, DMZ</li>
+        <li>Analyser trafic réseau (Wireshark, IDS/IPS)</li>
+        <li>Scanner et exploiter des vulnérabilités</li>
+        <li>Déployer services Linux (DNS, DHCP, SMTP)</li>
+        <li>Scripts Python + interfaces web HTML/CSS/PHP</li>
+        <li>Déployer GLPI pour gestion de parc</li>
+      </ul>
+    </div>
+
+    <div class="sav-card">
+      <span class="sav-type-badge badge-se">// Savoir-être</span>
+      <h3 class="sav-title">Posture professionnelle</h3>
+      <ul class="sav-list">
+        <li>Rigoureux et méthodique en technique</li>
+        <li>Curieux — veille active TryHackMe</li>
+        <li>Autonome en environnements Linux</li>
+        <li>Résilient et persévérant face aux obstacles</li>
+        <li>Capable de travailler en équipe sous pression</li>
+        <li>Créatif dans la conception de solutions</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- EXPERIENCES -->
+<section id="experiences">
+  <div class="section-tag">04 — parcours</div>
+  <h2 class="section-title"><em>Expériences</em> & formations</h2>
+
+  <div class="exp-timeline reveal">
+
+    <div class="exp-item">
+      <div class="exp-period">Avr. 2026 — Juin 2026 <span style="color:var(--green);font-size:10px;margin-left:8px">[EN COURS]</span></div>
+      <h3 class="exp-title">Stage — Administration réseaux & sécurité</h3>
+      <p class="exp-org">ANCV (Agence Nationale pour les Chèques-Vacances)</p>
+      <p class="exp-desc">Stage en cours en administration réseau et sécurité. Je vais réaliser la sécurisation de l'infrastructure réseau, la configuration de pare-feu, la mise en place d'une DMZ, le déploiement de VLAN ainsi que la gestion des accès et des flux réseau.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">Pare-feu</span>
+        <span class="exp-tag">DMZ</span>
+        <span class="exp-tag">VLAN</span>
+        <span class="exp-tag">Gestion des accès</span>
+        <span class="exp-tag">Infrastructure</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Sept. 2024 — en cours</div>
+      <h3 class="exp-title">BUT Réseaux & Télécommunications — Cybersécurité</h3>
+      <p class="exp-org">IUT de Villetaneuse — Université Sorbonne Paris Nord</p>
+      <p class="exp-desc">Formation en alternance théorie/pratique avec SAE (situations d'apprentissage) sur des cas réels : architecture réseau, messagerie sécurisée, labs offensifs, administration Linux, rapports de vulnérabilités, pfSense, Snort 3, Suricata, OpenVPN, Squid, pfBlockerNG.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">pfSense</span>
+        <span class="exp-tag">Wireshark</span>
+        <span class="exp-tag">Snort 3</span>
+        <span class="exp-tag">Suricata</span>
+        <span class="exp-tag">OpenVPN</span>
+        <span class="exp-tag">Linux</span>
+        <span class="exp-tag">Python</span>
+        <span class="exp-tag">VLAN/DMZ</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Admis — Sept. 2026</div>
+      <h3 class="exp-title">Cycle Ingénieur — ESIEA Paris</h3>
+      <p class="exp-org">Grande école d'ingénieurs — Cybersécurité & numérique</p>
+      <p class="exp-desc">Admission obtenue pour intégrer le cycle ingénieur en cybersécurité. Recherche d'une alternance à partir de septembre 2026 pour accompagner ce cursus.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">Ingénierie</span>
+        <span class="exp-tag">Cybersécurité</span>
+        <span class="exp-tag">Alternance recherchée</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Sept. 2021 — Juil. 2024</div>
+      <h3 class="exp-title">Bac Général — Mention Bien</h3>
+      <p class="exp-org">Lycée Camille Saint-Saëns — Deuil-la-Barre</p>
+      <p class="exp-desc">Baccalauréat général obtenu avec mention bien. Spécialités Physique-Chimie, Anglais et Mathématiques — base scientifique et linguistique solide pour les études en ingénierie réseau.</p>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Régulier</div>
+      <h3 class="exp-title">Cybersécurité — TryHackMe & Labs Kali</h3>
+      <p class="exp-org">Pratique personnelle — veille active</p>
+      <p class="exp-desc">Résolution de challenges offensifs et défensifs, exploitation de vulnérabilités en environnement contrôlé (Metasploitable, WinXP), configuration de Nessus, veille constante sur les nouvelles failles.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">TryHackMe</span>
+        <span class="exp-tag">Kali Linux</span>
+        <span class="exp-tag">Nessus</span>
+        <span class="exp-tag">Metasploit</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Job étudiant</div>
+      <h3 class="exp-title">Employé polyvalent</h3>
+      <p class="exp-org">Action Saint-Brice — Mise en rayon, caisse, logistique</p>
+      <p class="exp-desc">Gestion des stocks, mise en rayon selon planogrammes, encaissement clients, réception et contrôle des livraisons. Rigueur terrain, service client et gestion de la pression au quotidien.</p>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Engagement</div>
+      <h3 class="exp-title">Bénévolat associatif + Boxe</h3>
+      <p class="exp-org">Association communautaire · Sport de combat</p>
+      <p class="exp-desc">Coordination d'actions bénévoles, mobilisation de membres, travail collectif solidaire. La boxe — pratique hebdomadaire — forge discipline, gestion du stress et résilience mentale transposées dans le travail technique.</p>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROJETS ACADÉMIQUES -->
+<section id="projets" style="background:var(--bg2)">
+  <div class="section-tag">04b — SAE & labs</div>
+  <h2 class="section-title">Projets <em>académiques</em></h2>
+
+  <div class="savoirs-grid reveal">
+
+    <div class="sav-card">
+      <span class="sav-type-badge badge-sav">// SAE 1</span>
+      <h3 class="sav-title">Messagerie sécurisée TCP/UDP</h3>
+      <ul class="sav-list">
+        <li>Application de messagerie en ligne (TCP & UDP)</li>
+        <li>Ajout d'amis, échange de messages en temps réel</li>
+        <li>Système d'envoi d'argent fictif inspiré du réel</li>
+        <li>Mécanisme de salage (salt) pour la protection des données</li>
+        <li>Chiffrement et sécurisation des communications</li>
+      </ul>
+    </div>
+
+    <div class="sav-card">
+      <span class="sav-type-badge badge-sf">// SAE 2</span>
+      <h3 class="sav-title">Architecture réseau d'entreprise</h3>
+      <ul class="sav-list">
+        <li>Segmentation réseau en VLAN et DMZ</li>
+        <li>Déploiement de GLPI pour gestion du parc informatique</li>
+        <li>Création d'un site vitrine accessible depuis l'extérieur</li>
+        <li>Respect d'un cahier des charges professionnel</li>
+        <li>Infrastructure complète documentée</li>
+      </ul>
+    </div>
+
+    <div class="sav-card">
+      <span class="sav-type-badge badge-se">// Lab Cyber</span>
+      <h3 class="sav-title">Analyse de vulnérabilités</h3>
+      <ul class="sav-list">
+        <li>Lab virtualisé : Kali Linux + Nessus scanner</li>
+        <li>Cibles : Metasploitable & Windows XP vulnérables</li>
+        <li>Identification et cartographie des failles détectées</li>
+        <li>Exploitation contrôlée de vulnérabilités sélectionnées</li>
+        <li>Rédaction d'un rapport d'analyse complet</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- BILAN -->
+<section id="bilan">
+  <div class="section-tag">05 — autoévaluation</div>
+  <h2 class="section-title">Bilan <em>personnel</em></h2>
+
+  <div class="bilan-layout reveal">
+    <div class="bilan-col forts">
+      <div class="bilan-col-head">
+        <span class="bilan-indicator ind-green"></span>
+        <span class="bilan-col-title" style="color:var(--green)">Points forts</span>
+      </div>
+      <ul class="bilan-items">
+        <li class="bilan-item"><span class="bilan-item-bullet">[+]</span><span class="bilan-item-text">Résilience face aux obstacles et aux échecs</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[+]</span><span class="bilan-item-text">Aisance à l'oral — communication claire et fluide</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[+]</span><span class="bilan-item-text">Capacité à travailler en équipe, rôle de coordinateur</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[+]</span><span class="bilan-item-text">Générosité et sens de l'entraide naturel</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[+]</span><span class="bilan-item-text">Profil visuel : cartes mentales, rétroplanning Trello</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[+]</span><span class="bilan-item-text">Réactivité immédiate face aux imprévus techniques</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[+]</span><span class="bilan-item-text">Curiosité permanente et veille cyber active</span></li>
+      </ul>
+    </div>
+    <div class="bilan-col faibles">
+      <div class="bilan-col-head">
+        <span class="bilan-indicator ind-red"></span>
+        <span class="bilan-col-title" style="color:var(--red)">Axes de progression</span>
+      </div>
+      <ul class="bilan-items">
+        <li class="bilan-item"><span class="bilan-item-bullet">[-]</span><span class="bilan-item-text">Confiance en soi à renforcer</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[-]</span><span class="bilan-item-text">Expérience professionnelle encore limitée</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[-]</span><span class="bilan-item-text">Difficulté à demander de l'aide spontanément</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[-]</span><span class="bilan-item-text">Gestion du stress sous pression à affiner</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[-]</span><span class="bilan-item-text">Partager davantage ses méthodes avec l'équipe</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[-]</span><span class="bilan-item-text">Oser changer de rôle et prendre le leadership</span></li>
+        <li class="bilan-item"><span class="bilan-item-bullet">[-]</span><span class="bilan-item-text">Améliorer la planification du travail collectif</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- DÉMARCHE PORTFOLIO -->
+<section id="demarche" style="background:var(--bg2)">
+  <div class="section-tag">08 — réflexivité</div>
+  <h2 class="section-title">Démarche <em>portfolio</em></h2>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px" class="reveal">
+
+    <div style="background:var(--surface);border:1px solid var(--border);padding:2.5rem">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--green);text-transform:uppercase;margin-bottom:1.2rem">[01] Comment j'ai procédé</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">></span> Collecte de toutes mes traces : comptes-rendus de TPs, rapports SAE, notes, tableau d'autoévaluation et bilan de compétences</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">></span> Analyse des acquis par domaine : savoirs, savoir-faire, savoir-être — en lien avec les situations vécues</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">></span> Choix d'un format web interactif pour valoriser à la fois le contenu et les compétences techniques (HTML/CSS/JS)</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">></span> Structuration en plusieurs couches : profil → compétences évaluées → preuves → synthèse réflexive</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">></span> Relecture critique avec croisement entre autoévaluation et résultats réels obtenus</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);padding:2.5rem">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--cyan);text-transform:uppercase;margin-bottom:1.2rem">[02] Méthode de projet — étapes</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-family:var(--font-display);font-size:1.4rem;font-weight:900;color:var(--green);line-height:1;flex-shrink:0">1</span>
+          <div>
+            <p style="font-family:var(--font-mono);font-size:12px;color:var(--text);margin-bottom:2px">Collecte & documentation</p>
+            <p style="font-size:12px;color:var(--muted)">Rassembler l'ensemble des traces (TPs, SAE, notes, rapports de stage)</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-family:var(--font-display);font-size:1.4rem;font-weight:900;color:var(--green);line-height:1;flex-shrink:0">2</span>
+          <div>
+            <p style="font-family:var(--font-mono);font-size:12px;color:var(--text);margin-bottom:2px">Analyse & autoévaluation</p>
+            <p style="font-size:12px;color:var(--muted)">Évaluer chaque compétence avec des indicateurs précis et des exemples situés</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-family:var(--font-display);font-size:1.4rem;font-weight:900;color:var(--green);line-height:1;flex-shrink:0">3</span>
+          <div>
+            <p style="font-family:var(--font-mono);font-size:12px;color:var(--text);margin-bottom:2px">Structuration & rédaction</p>
+            <p style="font-size:12px;color:var(--muted)">Organiser la synthèse (intro + développement + conclusion) et les preuves associées</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-family:var(--font-display);font-size:1.4rem;font-weight:900;color:var(--green);line-height:1;flex-shrink:0">4</span>
+          <div>
+            <p style="font-family:var(--font-mono);font-size:12px;color:var(--text);margin-bottom:2px">Mise en forme web</p>
+            <p style="font-size:12px;color:var(--muted)">Développement du site HTML/CSS/JS — choix esthétique cohérent avec le domaine cyber</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-family:var(--font-display);font-size:1.4rem;font-weight:900;color:var(--green);line-height:1;flex-shrink:0">5</span>
+          <div>
+            <p style="font-family:var(--font-mono);font-size:12px;color:var(--text);margin-bottom:2px">Révision critique & amélioration</p>
+            <p style="font-size:12px;color:var(--muted)">Relecture, ajustement des traces présentées, vérification de la cohérence globale</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px" class="reveal">
+
+    <div style="background:var(--surface);border:1px solid var(--border);padding:2.5rem">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--red);text-transform:uppercase;margin-bottom:1.2rem">[03] Difficultés rencontrées</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--red)">!</span> Difficulté à prouver certaines compétences faute de traces suffisamment formalisées en cours d'année</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--red)">!</span> Exercice d'autoévaluation délicat : trouver l'équilibre entre lucidité critique et valorisation juste de ses acquis</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--red)">!</span> Organiser un volume important d'informations (SAE, TPs, stage) de façon lisible et cohérente</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--red)">!</span> Adopter une posture réflexive et distanciée sur son propre parcours, sans tomber dans la simple liste de tâches</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--red)">!</span> Concilier les exigences universitaires (démarche réflexive) et la lisibilité pour un recruteur professionnel</li>
+      </ul>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);padding:2.5rem">
+      <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;color:var(--green);text-transform:uppercase;margin-bottom:1.2rem">[04] Pistes d'amélioration</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:10px">
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">+</span> Mettre en place un journal de bord dès le début d'une SAE pour mieux tracer les décisions et apprentissages en temps réel</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">+</span> Intégrer les captures d'écran et livrables des TPs directement comme preuves consultables dans le portfolio</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">+</span> Ajouter une section dédiée aux notes et évaluations obtenues pour chaque SAE comme indicateur objectif de progression</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">+</span> Enrichir le portfolio au fil de l'alternance ESIEA avec de nouvelles compétences et situations professionnelles réelles</li>
+        <li style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-left:1.2rem;position:relative;line-height:1.6"><span style="position:absolute;left:0;color:var(--green-dim)">+</span> Développer la dimension collaborative : intégrer des retours de pairs ou tuteurs pour croiser les regards sur mes compétences</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag">09 — contact</div>
+  <h2 class="section-title">Me <em>contacter</em></h2>
+
+  <div class="contact-layout reveal">
+    <div>
+      <p class="contact-text">> Disponible pour un stage, une alternance<br>ou toute opportunité en cybersécurité.<br><br>> N'hésitez pas à me contacter directement. <span class="blink">_</span></p>
+      <div class="ascii-block">
+        ██████╗ ██╗ █████╗ ██████╗ <br>
+        ██╔══██╗██║██╔══██╗██╔══██╗<br>
+        ██████╔╝██║███████║██║  ██║<br>
+        ██╔══██╗██║██╔══██║██║  ██║<br>
+        ██║  ██║██║██║  ██║██████╔╝<br>
+        ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═════╝ 
+      </div>
+    </div>
+    <div class="contact-rows">
+      <a class="contact-row" href="mailto:riads0601@gmail.com" style="text-decoration:none">
+        <span class="contact-key">Email</span>
+        <span class="contact-val">riads0601@gmail.com</span>
+        <span style="color:var(--green-dim);font-family:var(--font-mono);font-size:11px">↗</span>
+      </a>
+      <a class="contact-row" href="tel:0651483750" style="text-decoration:none">
+        <span class="contact-key">Téléphone</span>
+        <span class="contact-val">06 51 48 37 50</span>
+        <span style="color:var(--green-dim);font-family:var(--font-mono);font-size:11px">↗</span>
+      </a>
+      <a class="contact-row" href="https://www.linkedin.com/in/riad-sadki" target="_blank" style="text-decoration:none">
+        <span class="contact-key">LinkedIn</span>
+        <span class="contact-val">linkedin.com/in/riad-sadki</span>
+        <span style="color:var(--green-dim);font-family:var(--font-mono);font-size:11px">↗</span>
+      </a>
+      <div class="contact-row">
+        <span class="contact-key">Localisation</span>
+        <span class="contact-val">Montmagny, 95360 — Île-de-France</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-key">Langues</span>
+        <span class="contact-val">FR · AR · EN (avancé) · ES (notions)</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-key">Objectif</span>
+        <span class="contact-val">Alternance ingénieur ESIEA — Sept. 2026</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-key">Disponibilité</span>
+        <span class="contact-val" style="color:var(--green)">OPEN TO OPPORTUNITIES <span class="blink">●</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-copy">© 2025 SADKI RIAD — Portfolio académique BUT R&T Cybersécurité</span>
+  <span class="footer-logo">RS<span style="color:var(--muted)">_</span></span>
+</footer>
+
+<script>
+// LOADER
+const loaderMsgs = [
+  'LOADING KERNEL MODULES...',
+  'MOUNTING FILESYSTEM...',
+  'INITIALIZING NETWORK STACK...',
+  'DECRYPTING PROFILE DATA...',
+  'ACCESS GRANTED — WELCOME'
+];
+let i = 0;
+const loaderMsg = document.getElementById('loader-msg');
+const interval = setInterval(() => {
+  i++;
+  if(i < loaderMsgs.length) loaderMsg.textContent = loaderMsgs[i];
+  else clearInterval(interval);
+}, 280);
+
+setTimeout(() => {
+  const loader = document.getElementById('loader');
+  loader.style.transition = 'opacity 0.5s';
+  loader.style.opacity = '0';
+  setTimeout(() => loader.style.display = 'none', 500);
+}, 1600);
+
+// CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 60);
+});
+
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+    ring.style.opacity = '1';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.opacity = '0.5';
+  });
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, {threshold: 0.1});
+reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
